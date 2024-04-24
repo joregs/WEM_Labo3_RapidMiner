@@ -179,17 +179,18 @@ L'accuracy est assez basse. L'équilibre entre precisions et recall est relative
 
 2. Quelle est l’influence des différentes étapes de « text processing » sur le résultat que vous obtenez ?
 
-- Tokenize: Splits text into individual words, crucial for identifying the building blocks of sentiment.
-- Transform Cases: Normalizes the case, helping to consolidate different forms of the same word, ensuring consistency.
-- Filter Stopwords: Removes common words that often don't carry sentiment, reducing noise and focusing on meaningful content.
-- Filter Tokens (by Length): Eliminates words that are too short or too long, which are often less informative, improving signal relevance.
-- Extract Sentiment: Applies sentiment analysis to extract the emotional tone from the text, directly determining the sentiment score.
+- Tokenize: Sépare le texte en mots individuels.
+- Transform Cases: normalise la casse, assurant que tous les mots sont en minuscules.
+- Filter Stopwords: supprime les mots communs qui n'apportent pas de sens au sentiment (e.g. the, as, to, ...), réduisant le bruit.
+- Filter Tokens (by Length): élimine les mots trop courts ou trop longs, qui ne sont pas pertinents pour l'analyse de sentiment.
+- Extract Sentiment: applique l'analyse de sentiment pour extraire le ton du texte.
 
-Each step cleans or refines the text data, ensuring that the sentiment analysis is as accurate and meaningful as possible.
+Chacune de ses étape rafine les données textuelles, assurant que l'analyse de sentiment est aussi précise et significative que possible.
 
 ![2.1](imgs/2.1.png)
 
 3. Deuxième étape
+
 Le calcul du threshold a été changé de la manière suivante :
 
 ```
