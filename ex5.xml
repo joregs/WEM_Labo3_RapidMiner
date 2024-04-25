@@ -25,14 +25,10 @@
       <operator activated="true" class="blending:set_role" compatibility="10.3.001" expanded="true" height="82" name="Set Role" width="90" x="45" y="34">
         <list key="set_roles">
           <parameter key="App" value="id"/>
-        </list>
-      </operator>
-      <operator activated="true" class="blending:set_role" compatibility="10.3.001" expanded="true" height="82" name="Set Role (2)" width="90" x="179" y="34">
-        <list key="set_roles">
           <parameter key="Category" value="label"/>
         </list>
       </operator>
-      <operator activated="true" class="normalize" compatibility="10.3.001" expanded="true" height="103" name="Normalize" width="90" x="313" y="34">
+      <operator activated="true" class="normalize" compatibility="10.3.001" expanded="true" height="103" name="Normalize" width="90" x="179" y="34">
         <parameter key="return_preprocessing_model" value="false"/>
         <parameter key="attribute_filter_type" value="all"/>
         <parameter key="attribute" value=""/>
@@ -46,17 +42,16 @@
         <parameter key="except_block_type" value="value_series_end"/>
         <parameter key="invert_selection" value="false"/>
         <parameter key="include_special_attributes" value="false"/>
-        <parameter key="method" value="Z-transformation"/>
+        <parameter key="method" value="range transformation"/>
         <parameter key="min" value="0.0"/>
         <parameter key="max" value="1.0"/>
         <parameter key="allow_negative_values" value="false"/>
       </operator>
-      <operator activated="true" class="multiply" compatibility="10.3.001" expanded="true" height="103" name="Multiply" width="90" x="380" y="187"/>
-      <operator activated="true" class="concurrency:k_means" compatibility="10.3.001" expanded="true" height="82" name="Clustering" width="90" x="447" y="34">
+      <operator activated="true" class="concurrency:k_means" compatibility="10.3.001" expanded="true" height="82" name="Clustering" width="90" x="380" y="34">
         <parameter key="add_cluster_attribute" value="true"/>
         <parameter key="add_as_label" value="false"/>
         <parameter key="remove_unlabeled" value="false"/>
-        <parameter key="k" value="10"/>
+        <parameter key="k" value="5"/>
         <parameter key="max_runs" value="10"/>
         <parameter key="determine_good_start_values" value="true"/>
         <parameter key="measure_types" value="BregmanDivergences"/>
@@ -77,28 +72,16 @@
         <parameter key="use_local_random_seed" value="false"/>
         <parameter key="local_random_seed" value="1992"/>
       </operator>
-      <operator activated="true" class="cluster_distance_performance" compatibility="10.3.001" expanded="true" height="103" name="Performance" width="90" x="514" y="289">
-        <parameter key="main_criterion" value="Davies Bouldin"/>
-        <parameter key="main_criterion_only" value="false"/>
-        <parameter key="normalize" value="false"/>
-        <parameter key="maximize" value="false"/>
-      </operator>
       <connect from_op="Retrieve ex5_data" from_port="output" to_op="Select Attributes" to_port="example set input"/>
       <connect from_op="Select Attributes" from_port="original" to_op="Set Role" to_port="example set input"/>
-      <connect from_op="Set Role" from_port="example set output" to_op="Set Role (2)" to_port="example set input"/>
-      <connect from_op="Set Role (2)" from_port="example set output" to_op="Normalize" to_port="example set input"/>
-      <connect from_op="Normalize" from_port="example set output" to_op="Multiply" to_port="input"/>
-      <connect from_op="Multiply" from_port="output 1" to_op="Clustering" to_port="example set"/>
-      <connect from_op="Multiply" from_port="output 2" to_op="Performance" to_port="example set"/>
-      <connect from_op="Clustering" from_port="cluster model" to_op="Performance" to_port="cluster model"/>
-      <connect from_op="Performance" from_port="performance" to_port="result 2"/>
-      <connect from_op="Performance" from_port="example set" to_port="result 1"/>
-      <connect from_op="Performance" from_port="cluster model" to_port="result 3"/>
+      <connect from_op="Set Role" from_port="example set output" to_op="Normalize" to_port="example set input"/>
+      <connect from_op="Normalize" from_port="example set output" to_op="Clustering" to_port="example set"/>
+      <connect from_op="Clustering" from_port="cluster model" to_port="result 1"/>
+      <connect from_op="Clustering" from_port="clustered set" to_port="result 2"/>
       <portSpacing port="source_input 1" spacing="0"/>
       <portSpacing port="sink_result 1" spacing="0"/>
       <portSpacing port="sink_result 2" spacing="0"/>
       <portSpacing port="sink_result 3" spacing="0"/>
-      <portSpacing port="sink_result 4" spacing="0"/>
     </process>
   </operator>
 </process>
