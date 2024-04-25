@@ -206,3 +206,50 @@ Nous obtenons une accuracy très basse, de 26.04% (le modèle est correct enviro
 Nous obtenons un haut recall, mais une faible précision. Ceci signifie que le modèle a tendance à prédire plus de classes neutres que de classes positives ou négatives.
 
 Pour obtenir de meilleurs résultats, il serait intéressant de fine-tuner le threshold pour obtenir un meilleur équilibre entre précision et recall.
+
+
+## Exercice 3
+
+1. Le ratio de samples attribués au training set et test set influe sur les performances du modèle, en effet les résultats changent lorsque qu'on joue avec le ratio. On constate un probable sur-apprentissage avec un ratio 0.9 - 0.1.
+
+- Ratio 0.6 - 0.4:
+![3.1.6-4](imgs/3.1.6-4.png)
+
+- Ratio 0.7 - 0.3:
+![3.1.7-3](imgs/3.1.7-3.png)
+
+- Ratio 0.9 - 0.1:
+![3.1.9-1](imgs/3.1.9-1.png)
+
+
+
+2. On fait varier le paramètre k avec un ratio 0.7 - 0.3 fixe.
+Les résultats varient en fonction de la valeur de k, la plus grosse variation visible est cependant visible dans la précision lorsque l'on choisit le k-nn pondéré.
+
+- k = 20:
+![3.2.k-20](imgs/3.2.k-20.png)
+
+- k = 80 (default value):
+![3.2.k-80](imgs/3.1.7-3.png)
+
+- k = 80 pondéré (weighted knn)
+![3.2.k-80-weighted](imgs/3.2.k-80-weighted.png)
+
+- k = 160:
+![3.2.k-160](imgs/3.2.k-160.png)
+
+
+3. On constate qu'en utilisant l'élément **User k-nn**, toutes les métriques de performance augmentent.
+![3.3](imgs/3.3.png)
+
+
+
+4. La combinaison des modèles **User k-nn** et **Item k-nn** fait baisser légèrement l'area under the curve mais permet une augmentation de la précision.
+![3.4](imgs/3.4.png)
+
+5. Fine tuner les paramètres/modèles utilisés permet d'augmenter les performances générales de prédiction. 
+
+6. Les meilleures possibilités testées sont le modèle **Item k-nn pondéré** (weighted) et la combinaison testée au point 4 où la précision, l'area under the curve et la mean average precision sont au plus haut.
+
+7. On constate qu'en utilisant l'élément **User k-nn**, toutes les métriques de performance augmentent.
+
