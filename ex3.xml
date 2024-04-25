@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="10.3.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="10.3.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="10.3.001" expanded="true" height="68" name="Retrieve" width="90" x="45" y="136">
+        <parameter key="repository_entry" value="../data/movies"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="10.3.001" expanded="true" height="68" name="Retrieve (2)" width="90" x="45" y="238">
+        <parameter key="repository_entry" value="../data/ratings"/>
+      </operator>
+      <operator activated="true" class="concurrency:join" compatibility="10.3.001" expanded="true" height="82" name="Join" width="90" x="246" y="187">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="inner"/>
+        <parameter key="use_id_attribute_as_key" value="false"/>
+        <list key="key_attributes">
+          <parameter key="movieId" value="movieId"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="10.3.001" expanded="true" height="82" name="Set Role (2)" width="90" x="447" y="187">
+        <parameter key="attribute_name" value="movieId"/>
+        <parameter key="target_role" value="item identification"/>
+        <list key="set_additional_roles">
+          <parameter key="userId" value="user identification"/>
+          <parameter key="movieId" value="item identification"/>
+        </list>
+      </operator>
+      <operator activated="true" class="blending:split_data" compatibility="10.3.001" expanded="true" height="103" name="Split Data" width="90" x="648" y="187">
+        <enumeration key="partitions">
+          <parameter key="ratio" value="0.7"/>
+          <parameter key="ratio" value="0.3"/>
+        </enumeration>
+        <parameter key="sampling_type" value="automatic"/>
+        <parameter key="use_local_random_seed" value="false"/>
+        <parameter key="local_random_seed" value="1992"/>
+      </operator>
+      <operator activated="true" class="multiply" compatibility="10.3.001" expanded="true" height="124" name="Multiply" width="90" x="849" y="187"/>
+      <operator activated="true" class="irbrecommender:item_k-NN" compatibility="5.1.002" expanded="true" height="82" name="Item k-NN" width="90" x="1050" y="136">
+        <parameter key="k" value="80"/>
+        <parameter key="Weighted Knn" value="true"/>
+      </operator>
+      <operator activated="true" class="irbrecommender:user_k-NN" compatibility="5.1.002" expanded="true" height="82" name="User k-NN" width="90" x="1050" y="34">
+        <parameter key="k" value="80"/>
+        <parameter key="Weighted Knn" value="false"/>
+      </operator>
+      <operator activated="true" class="irbrecommender:model_combiner_ir" compatibility="5.1.002" expanded="true" height="103" name="Model Combiner" width="90" x="1251" y="85">
+        <parameter key="default_weight" value="1.0"/>
+        <list key="model_weights"/>
+      </operator>
+      <operator activated="true" class="multiply" compatibility="10.3.001" expanded="true" height="103" name="Multiply (2)" width="90" x="849" y="340"/>
+      <operator activated="true" class="irbrecommender:apply_model_ir" compatibility="5.1.002" expanded="true" height="82" name="Apply Model" width="90" x="1519" y="238">
+        <parameter key="n" value="100"/>
+        <parameter key="Online updates" value="false"/>
+      </operator>
+      <operator activated="true" class="irbrecommender:performance_item_recommendation" compatibility="5.1.002" expanded="true" height="103" name="Performance" width="90" x="1854" y="136"/>
+      <connect from_op="Retrieve" from_port="output" to_op="Join" to_port="left"/>
+      <connect from_op="Retrieve (2)" from_port="output" to_op="Join" to_port="right"/>
+      <connect from_op="Join" from_port="join" to_op="Set Role (2)" to_port="example set input"/>
+      <connect from_op="Set Role (2)" from_port="example set output" to_op="Split Data" to_port="example set"/>
+      <connect from_op="Split Data" from_port="partition 1" to_op="Multiply" to_port="input"/>
+      <connect from_op="Split Data" from_port="partition 2" to_op="Multiply (2)" to_port="input"/>
+      <connect from_op="Multiply" from_port="output 1" to_op="User k-NN" to_port="example set"/>
+      <connect from_op="Multiply" from_port="output 2" to_op="Item k-NN" to_port="example set"/>
+      <connect from_op="Multiply" from_port="output 3" to_op="Performance" to_port="train set"/>
+      <connect from_op="Item k-NN" from_port="Model" to_op="Model Combiner" to_port="model 2"/>
+      <connect from_op="User k-NN" from_port="Model" to_op="Model Combiner" to_port="model 1"/>
+      <connect from_op="Model Combiner" from_port="grouped model" to_op="Apply Model" to_port="Model"/>
+      <connect from_op="Multiply (2)" from_port="output 1" to_op="Performance" to_port="test set"/>
+      <connect from_op="Multiply (2)" from_port="output 2" to_op="Apply Model" to_port="query set"/>
+      <connect from_op="Apply Model" from_port="Model" to_op="Performance" to_port="Model"/>
+      <connect from_op="Performance" from_port="performance" to_port="result 1"/>
+      <connect from_op="Performance" from_port="evaluation measures" to_port="result 2"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+    </process>
+  </operator>
+</process>
