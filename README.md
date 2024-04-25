@@ -258,9 +258,15 @@ Les résultats varient en fonction de la valeur de k, la plus grosse variation v
 1. Constatez-vous des changements pour des différentes paramètres des blocs « FP-Growth » et 
 « Create  Association  Rules » ?  Veuillez  commenter  le  paramétrage  choisit  et  les  résultats 
 obtenus. 
+
+Nous n'avons pas reussi à faire fonctionner le bloc Create Association Rules, en effet ce dernier ne retourne rien malgré les seuils bas. 
+![4.1](imgs/4.1.png)
+
  
 2. Est-il possible d’utiliser une/des autre/s colonne/s à partir des données initiales pour produire 
 des règles intéressantes ?
+
+Oui, utiliser la colonne "Country" pour générer des règles d'association spécifiques à un pays ou une région par exemple, on peut analyser les habitudes d'achat des clients en fonction de leur pays ou encore, utiliser la colonne "UnitPrice" pour analyser les associations entre les produits en fonction de leur prix du style, rechercher des règles d'association entre des produits haut de gamme et des produits similaires moins chers.
 
 ## Exercice 5 
 1. Constatez-vous  des  changements  pour  des  différentes  nombre d’itérations (max  runs)  de  k-
@@ -273,15 +279,20 @@ Le principal changement serait au niveau du temps d'execution évidemment.
 
 Il ne l'est quasiment pas, le partitionnement à 2 clusters semble uniquement séléctionner les applications les plus populaires mais les clusters sont alors très déséquilibrés (ce qui ne pose pas de problème en soi) :
 
+```
 Cluster 0: 9236 items
 Cluster 1: 130 items
 Total number of items: 9366
+```
 
+```
 PerformanceVector:
 Avg. within centroid distance: -0.028
 Avg. within centroid distance_cluster_0: -0.027
 Avg. within centroid distance_cluster_1: -0.120
 Davies Bouldin: -0.582
+```
+
 
 Comment les résultats changent-ils en augmentant le nombre des clusters ? Veuillez 
 commenter  les  résultats  obtenus  en  termes  des  centroïdes  (centre  de  masse  de  chaque 
@@ -290,6 +301,7 @@ applications regroupées dans les clusters.
 
 Avec 5 :
 
+```
 PerformanceVector:
 Avg. within centroid distance: -0.011
 Avg. within centroid distance_cluster_0: -0.007
@@ -298,11 +310,13 @@ Avg. within centroid distance_cluster_2: -0.020
 Avg. within centroid distance_cluster_3: -0.055
 Avg. within centroid distance_cluster_4: -0.070
 Davies Bouldin: -0.543
+```
 
 On observe une répartition plus équilibrée des données. Le cluster 1 reste plus petit que les autres clusters. Le Davies Bouldin est également plus bas que dans le cas de 2 clusters, ce qui indique une meilleure séparation des clusters.
 
 Avec 10 :
 
+```
 Cluster 0: 3966 items
 Cluster 1: 138 items
 Cluster 2: 172 items
@@ -314,7 +328,9 @@ Cluster 7: 4069 items
 Cluster 8: 872 items
 Cluster 9: 1 items
 Total number of items: 9366
+```
 
+```
 Avg. within centroid distance: -0.005
 Avg. within centroid distance_cluster_0: -0.004
 Avg. within centroid distance_cluster_1: -0.054
@@ -327,7 +343,9 @@ Avg. within centroid distance_cluster_7: -0.003
 Avg. within centroid distance_cluster_8: -0.006
 Avg. within centroid distance_cluster_9: -0.000
 Davies Bouldin: -0.480
- 
+ ```
+
+
 Dispersion plus grande des données ici avec des clusters de tailles variées. Certains clusters contiennent un nombre très faible d'items, ce qui peut les rendre moins significatifs. Cependant, le Davies Bouldin est encore plus bas, indiquant une meilleure séparation entre les clusters.
 
 3. Comment les résultats changent-ils en utilisant des autres algorithmes de clustering ? 
@@ -335,20 +353,25 @@ Dispersion plus grande des données ici avec des clusters de tailles variées. C
 Nous allons ici prendre un nombre de clusters de 5 et nous baser uniquement sur les résultats du clustering car il est compliqué d'avoir des métriques de performance similaires selon les algorithmes (on ne peut par exemple pas avoir de Davies Bouldin sur un algorithme de Support Vector).
 
 Voici les résultats pour Random clustering :
+
+```
 Cluster 0: 1904 items
 Cluster 1: 1847 items
 Cluster 2: 1875 items
 Cluster 3: 1878 items
 Cluster 4: 1862 items
 Total number of items: 9366
+```
 
 Les données sont très équilibrées contrairement à k-means :
 
+```
 Cluster 0: 7805 items
 Cluster 1: 130 items
 Cluster 2: 1275 items
 Cluster 3: 141 items
 Cluster 4: 15 items
 Total number of items: 9366
+```
 
 Les résultats changent donc totalement selon l'algorithme de clusterisation choisi mais il est difficile de les comparer.
